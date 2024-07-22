@@ -14,8 +14,16 @@ public class User {
     private String nickname;
     private String role;
     private String status;
+    private String avatar;
     public User() {}
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public Long getId() {
         return id;

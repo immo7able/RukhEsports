@@ -1,17 +1,20 @@
 package org.example.rukh.controller;
 
+import org.example.rukh.model.User;
 import org.example.rukh.model.UserProfileDTO;
 import org.example.rukh.service.ProfileService;
+import org.example.rukh.service.UserService;
+import org.example.rukh.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.Collections;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -19,29 +22,53 @@ public class ProfileController {
 
     @Autowired
     private ProfileService profileService;
-
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private UserService userService;
     @PutMapping("/updateEmail")
-    public ResponseEntity<String> updateEmail(@RequestBody UserProfileDTO userProfileDTO, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> updateEmail(@RequestBody UserProfileDTO userProfileDTO, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
             return ResponseEntity.status(401).body("Unauthorized");
         }
-        String username = userDetails.getUsername();
-        profileService.updateUserEmail(username, userProfileDTO.getEmail());
-        return ResponseEntity.ok("Email updated successfully");
+        String error = profileService.updateUserEmail(userDetails, userProfileDTO.getEmail());
+        if(error==null) {
+            String token = jwtUtil.generateToken(userProfileDTO.getEmail());
+            return ResponseEntity.ok().body(Map.of("token", token));
+        }else return ResponseEntity.badRequest().body(Collections.singletonMap("error", error));
     }
 
     @PutMapping("/updatePassword")
-    public ResponseEntity<String> updatePassword(@RequestBody UserProfileDTO userProfileDTO, Principal principal) {
-        String username = principal.getName();
-        profileService.updateUserPassword(username, userProfileDTO.getPassword());
-        return ResponseEntity.ok("Password updated successfully");
+    public ResponseEntity<?> updatePassword(@RequestBody UserProfileDTO userProfileDTO, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+        String error = profileService.updateUserPassword(userDetails, userProfileDTO.getPassword());
+        if(error==null) {
+            return ResponseEntity.ok("Пароль успешно изменен");
+        }else return ResponseEntity.badRequest().body(Collections.singletonMap("error", error));
     }
 
-    /*@PutMapping("/updateNickname")
-    public ResponseEntity<String> updateNickname(@RequestBody UserProfileDTO userProfileDTO, Principal principal) {
-        String username = principal.getName();
-        profileService.updateUserNickname(username, userProfileDTO.getNickname());
-        return ResponseEntity.ok("Nickname updated successfully");
-    }*/
+    @PutMapping("/updateNickname")
+    public ResponseEntity<?> updateNickname(@RequestBody UserProfileDTO userProfileDTO, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+        String error = profileService.updateUserNickname(userDetails, userProfileDTO.getNickname());
+        if(error==null) {
+            return ResponseEntity.ok("Nickname updated successfully");
+        }else return ResponseEntity.badRequest().body(Collections.singletonMap("error", error));
+    }
+    @PutMapping("/updateProfileImage")
+    public ResponseEntity<?> updateProfileImage(@RequestParam MultipartFile avatar, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+        String error = profileService.updateUserProfileImage(userDetails, avatar );
+        if(error==null) {
+            User user = userService.getUser(userDetails.getUsername());
+            return ResponseEntity.ok().body(Map.of("avatar","/uploads/"+user.getAvatar()));
+        }else return ResponseEntity.badRequest().body(Collections.singletonMap("error", error));
+    }
 
 }

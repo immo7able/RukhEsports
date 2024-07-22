@@ -8,6 +8,7 @@ import org.example.rukh.model.User;
 import org.example.rukh.utils.JwtUtil;
 import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,10 +30,8 @@ public class UserController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, String> payload) {
-        System.out.println("Payload received: " + payload);
         String email = payload.get("email");
         String password = payload.get("password");
         String confirmPassword = payload.get("confirmPassword");
@@ -57,7 +56,6 @@ public class UserController {
             return ResponseEntity.status(401).body(Collections.singletonMap("error","Неверные учетные данные"));
         }
     }
-    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
         System.out.println(userDetails);
@@ -66,6 +64,7 @@ public class UserController {
         }
         String username = userDetails.getUsername();
         User user = userService.getUser(username);
+        user.setAvatar("/uploads/"+user.getAvatar());
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {
