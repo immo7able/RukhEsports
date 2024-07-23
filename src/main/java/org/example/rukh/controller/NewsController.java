@@ -22,16 +22,14 @@ public class NewsController {
     private NewsService newsService;
 
     @GetMapping("/{discipline}")
-    public ResponseEntity<Map<String, List<NewsDTO>>> getNews(@PathVariable(value="discipline") String discipline) {
-        List<NewsDTO> allNews = newsService.getAllNews();
-        List<NewsDTO> filteredNews = allNews.stream()
-                .filter(news -> news.getCategory().equalsIgnoreCase(discipline))
-                .collect(Collectors.toList());
-
-        Map<String, List<NewsDTO>> response = new HashMap<>();
-        response.put(discipline, filteredNews);
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<List<NewsDTO>> getNews(@PathVariable(value="discipline") String discipline) {
+        List<NewsDTO> News = newsService.getNewsByDiscipline(discipline);
+        return ResponseEntity.ok(News);
+    }
+    @GetMapping("/{discipline}/{id}")
+    public ResponseEntity<NewsDTO> getNewsById(@PathVariable(value="discipline") String discipline, @PathVariable(value = "id") int id) {
+        NewsDTO News = newsService.getNewsById(discipline, id);
+        return ResponseEntity.ok(News);
     }
 }
 

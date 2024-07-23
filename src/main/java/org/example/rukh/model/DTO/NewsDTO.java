@@ -9,6 +9,15 @@
         private Date date;
         private String image;
         private String category;
+        private int likeCount;
+
+        public int getLikeCount() {
+            return likeCount;
+        }
+
+        public void setLikeCount(int likeCount) {
+            this.likeCount = likeCount;
+        }
 
         public String getImage() {
             return image;

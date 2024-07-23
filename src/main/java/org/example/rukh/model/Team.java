@@ -10,18 +10,44 @@ public class Team {
     private Long id;
 
     private String name;
-
+    private String discipline;
+    private String content;
+    private String img;
     @ManyToOne
-    @JoinColumn(name = "fk_gallery")
-    private Gallery gallery;
+    @JoinColumn(name = "match_id")
+    private Matches matches;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_player")
-    private Player player;
+    public String getDiscipline() {
+        return discipline;
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "fk_discipline")
-    private Discipline discipline;
+    public void setDiscipline(String discipline) {
+        this.discipline = discipline;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public Matches getMatches() {
+        return matches;
+    }
+
+    public void setMatches(Matches matches) {
+        this.matches = matches;
+    }
 
     public Long getId() {
         return id;
@@ -37,30 +63,6 @@ public class Team {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Gallery getGallery() {
-        return gallery;
-    }
-
-    public void setGallery(Gallery gallery) {
-        this.gallery = gallery;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public Discipline getDiscipline() {
-        return discipline;
-    }
-
-    public void setDiscipline(Discipline discipline) {
-        this.discipline = discipline;
     }
 
     // Getters and Setters

@@ -22,7 +22,7 @@ public class AdminService {
     private static final Pattern ALLOWED_CHARACTERS_PATTERN = Pattern.compile("^[a-zA-Z0-9.@_]+$");
     public String validateNewsData(String category, String content, String title, MultipartFile image){
         try{
-            if (!category.equals("pubg")&&!category.equals("mlbb")&&!category.equals("hok")) {
+            if (!category.equalsIgnoreCase("pubg")&&!category.equalsIgnoreCase("mob")&&!category.equalsIgnoreCase("hok")) {
                 throw new Exception("Неверная категория");
             }
             if (content.isEmpty()) {
@@ -42,7 +42,7 @@ public class AdminService {
             String resultImageName = UUIDAvatar+"."+image.getOriginalFilename();
             image.transferTo(new File(uploadPath+"/"+resultImageName));
             News news = new News();
-            news.setCategory(category);
+            news.setCategory(category.toLowerCase());
             news.setContent(content);
             news.setTitle(title);
             news.setImage(resultImageName);

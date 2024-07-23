@@ -2,23 +2,71 @@ package org.example.rukh.model;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table
 public class Tournament {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
+    private String content;
     private String status;
+    private String result;
+    private String img;
+    private String discipline;
+    private Date date;
+    private String prizepool;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_matches")
-    private Matches matches;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_news")
-    private News news;
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public String getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(String discipline) {
+        this.discipline = discipline;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getPrizepool() {
+        return prizepool;
+    }
+
+    public void setPrizepool(String prizepool) {
+        this.prizepool = prizepool;
+    }
 
     public Long getId() {
         return id;
@@ -43,22 +91,5 @@ public class Tournament {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public Matches getMatches() {
-        return matches;
-    }
-
-    public void setMatches(Matches matches) {
-        this.matches = matches;
-    }
-
-    public News getNews() {
-        return news;
-    }
-
-    public void setNews(News news) {
-        this.news = news;
-    }
-
     // Getters and Setters
 }

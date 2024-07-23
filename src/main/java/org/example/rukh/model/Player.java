@@ -11,10 +11,35 @@ public class Player {
 
     private String nickname;
     private String name;
-
+    private String content;
+    private String img;
     @ManyToOne
-    @JoinColumn(name = "fk_gallery")
-    private Gallery gallery;
+    @JoinColumn(name = "team_id")
+    private Team team;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 
     public Long getId() {
         return id;
@@ -40,13 +65,6 @@ public class Player {
         this.name = name;
     }
 
-    public Gallery getGallery() {
-        return gallery;
-    }
-
-    public void setGallery(Gallery gallery) {
-        this.gallery = gallery;
-    }
 
     // Getters and Setters
 }

@@ -18,6 +18,17 @@ public class News {
     private Date date;
     private String image;
     private String category;
+    @ManyToOne
+    @JoinColumn(name = "tournament_id")
+    private Tournament tournament;
+
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
+    }
 
     public String getImage() {
         return image;

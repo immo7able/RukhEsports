@@ -3,6 +3,7 @@ package org.example.rukh.model;
 import jakarta.persistence.*;
 
 import java.security.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table
@@ -13,12 +14,46 @@ public class Matches {
 
     private String title;
     private String result;
-    private Timestamp date;
+    private Date date;
     private String youtubeUrl;
-
+    private String status;
+    private String img;
+    private String discipline;
     @ManyToOne
-    @JoinColumn(name = "fk_discipline")
-    private Discipline discipline;
+    @JoinColumn(name = "tournament_id")
+    private Tournament tournament;
+
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public String getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(String discipline) {
+        this.discipline = discipline;
+    }
 
     public Long getId() {
         return id;
@@ -44,11 +79,11 @@ public class Matches {
         this.result = result;
     }
 
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -60,13 +95,6 @@ public class Matches {
         this.youtubeUrl = youtubeUrl;
     }
 
-    public Discipline getDiscipline() {
-        return discipline;
-    }
-
-    public void setDiscipline(Discipline discipline) {
-        this.discipline = discipline;
-    }
 
     // Getters and Setters
 }
