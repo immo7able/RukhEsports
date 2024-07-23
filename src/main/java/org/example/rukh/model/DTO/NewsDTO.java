@@ -1,14 +1,12 @@
     package org.example.rukh.model.DTO;
 
-
-
-
+    import java.util.Date;
 
     public class NewsDTO {
         private Long id;
         private String title;
         private String content;
-        private String date;
+        private Date date;
         private String image;
         private String category;
 
@@ -44,11 +42,11 @@
             this.content = content;
         }
 
-        public String getDate() {
+        public Date getDate() {
             return date;
         }
 
-        public void setDate(String date) {
+        public void setDate(Date date) {
             this.date = date;
         }
 

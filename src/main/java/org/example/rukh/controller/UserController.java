@@ -58,7 +58,6 @@ public class UserController {
     }
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
-        System.out.println(userDetails);
         if (userDetails == null) {
             return ResponseEntity.status(401).body("Unauthorized");
         }
