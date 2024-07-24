@@ -31,5 +31,10 @@ public class NewsController {
         NewsDTO News = newsService.getNewsById(discipline, id);
         return ResponseEntity.ok(News);
     }
+    @GetMapping("/")
+    public ResponseEntity<List<NewsDTO>> getAllNews() {
+        List<NewsDTO> News = newsService.getAllNews();
+        return ResponseEntity.ok(News);
+    }
 }
 

@@ -34,14 +34,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())  // Отключение защиты CSRF
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Настройка управления сессиями как stateless
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/login", "/api/register", "/api/news").permitAll()
                         .requestMatchers("/api/profile", "/api/logout").authenticated()
                         .requestMatchers("/api/admin").hasRole("ADMIN")
                         .anyRequest().authenticated()
-                )
-                .csrf(csrf -> csrf.disable())  // Отключение защиты CSRF
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Настройка управления сессиями как stateless
+                );
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 

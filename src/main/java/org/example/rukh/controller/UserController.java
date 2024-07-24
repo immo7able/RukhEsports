@@ -63,14 +63,13 @@ public class UserController {
         }
         String username = userDetails.getUsername();
         User user = userService.getUser(username);
-        user.setAvatar("/uploads/"+user.getAvatar());
         if (user != null) {
+            user.setAvatar("/uploads/" + user.getAvatar());
             return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.status(404).body("User not found");
         }
     }
-
 
     @GetMapping("/logout")
     public ResponseEntity<?> logout(@AuthenticationPrincipal UserDetails userDetails) {

@@ -1,46 +1,15 @@
-package org.example.rukh.model;
+package org.example.rukh.model.DTO;
 
-import jakarta.persistence.*;
+import org.example.rukh.model.Team;
 
-@Entity
-@Table
-public class Player {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PlayerDTO {
     private Long id;
-
     private String nickname;
     private String name;
     private String content;
     private String img;
     private String socialMediaLinks;
-    @ManyToOne
-    @JoinColumn(name = "team_id")
     private Team team;
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
 
     public Long getId() {
         return id;
@@ -66,6 +35,22 @@ public class Player {
         this.name = name;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
     public String getSocialMediaLinks() {
         return socialMediaLinks;
     }
@@ -74,6 +59,11 @@ public class Player {
         this.socialMediaLinks = socialMediaLinks;
     }
 
+    public Team getTeam() {
+        return team;
+    }
 
-    // Getters and Setters
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 }
