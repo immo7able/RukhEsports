@@ -38,9 +38,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Настройка управления сессиями как stateless
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/login", "/api/register", "/api/news").permitAll()
-                        .requestMatchers("/api/profile", "/api/logout").authenticated()
+                        .requestMatchers("/api/profile", "/api/logout","/api/admin/").authenticated()
                         .requestMatchers("/api/admin").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 );
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

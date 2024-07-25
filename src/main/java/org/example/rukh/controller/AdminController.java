@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collections;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -23,7 +24,7 @@ public class AdminController {
                                         @RequestParam("title") String title,
                                         @RequestParam("image") MultipartFile image,
                                         @AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails.getAuthorities().stream()
+        if (userDetails==null||userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
@@ -43,7 +44,7 @@ public class AdminController {
                                         @RequestParam("title") String title,
                                         @RequestParam("image") MultipartFile image,
                                         @PathVariable("id") int id) {
-        if (userDetails.getAuthorities().stream()
+        if (userDetails==null||userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
@@ -59,7 +60,7 @@ public class AdminController {
     @DeleteMapping("/deleteNews/{id}")
     public ResponseEntity<?> deleteNews(@AuthenticationPrincipal UserDetails userDetails,
                                         @PathVariable("id") int id) {
-        if (userDetails.getAuthorities().stream()
+        if (userDetails==null||userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
@@ -78,7 +79,7 @@ public class AdminController {
                                         @RequestParam("name") String name,
                                         @RequestParam("image") MultipartFile image,
                                         @AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails.getAuthorities().stream()
+        if (userDetails==null||userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
@@ -98,7 +99,7 @@ public class AdminController {
                                         @RequestParam("name") String name,
                                         @RequestParam("image") MultipartFile image,
                                         @PathVariable("id") int id) {
-        if (userDetails.getAuthorities().stream()
+        if (userDetails==null||userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
@@ -114,7 +115,7 @@ public class AdminController {
     @DeleteMapping("/deleteTeam/{id}")
     public ResponseEntity<?> deleteTeam(@AuthenticationPrincipal UserDetails userDetails,
                                         @PathVariable("id") int id) {
-        if (userDetails.getAuthorities().stream()
+        if (userDetails==null||userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
@@ -135,12 +136,113 @@ public class AdminController {
                                           @RequestParam("team_id") int team_id,
                                           @RequestParam("socialMediaLinks") String socialMediaLinks,
                                         @AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails.getAuthorities().stream()
+        if (userDetails==null||userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
         } else {
             String error = adminService.validatePlayerData(nickname, name, content, image, team_id, socialMediaLinks);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
+    @PutMapping("/updatePlayer/{id}")
+    public ResponseEntity<?> updatePlayer(@RequestParam("nickname") String nickname,
+                                          @RequestParam("name") String name,
+                                          @RequestParam("content") String content,
+                                          @RequestParam("image") MultipartFile image,
+                                          @RequestParam("team_id") int team_id,
+                                          @RequestParam("socialMediaLinks") String socialMediaLinks,
+                                          @AuthenticationPrincipal UserDetails userDetails,
+                                        @PathVariable("id") int id) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.updatePlayerData(id, nickname, name, content, image, team_id, socialMediaLinks);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
+    @DeleteMapping("/deletePlayer/{id}")
+    public ResponseEntity<?> deletePlayer(@AuthenticationPrincipal UserDetails userDetails,
+                                        @PathVariable("id") int id) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.deletePlayer(id);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
+    @PostMapping("/createTournament")
+    public ResponseEntity<?> createTournament(@RequestParam("name") String name,
+                                              @RequestParam("date")String date,
+                                              @RequestParam("content")String content,
+                                              @RequestParam("image") MultipartFile image,
+                                              @RequestParam("discipline") String discipline,
+                                              @RequestParam("status") String status,
+                                              @RequestParam("result") String result,
+                                              @RequestParam("prizepool") String prizepool,
+                                              @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.validateTournamentData(name, date, content, image, discipline, status, result, prizepool);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
+    @PutMapping("/updateTournament/{id}")
+    public ResponseEntity<?> updateTournament(@RequestParam("name") String name,
+                                              @RequestParam("date")String date,
+                                              @RequestParam("content")String content,
+                                              @RequestParam("image") MultipartFile image,
+                                              @RequestParam("discipline") String discipline,
+                                              @RequestParam("status") String status,
+                                              @RequestParam("result") String result,
+                                              @RequestParam("prizepool") String prizepool,
+                                              @AuthenticationPrincipal UserDetails userDetails,
+                                              @PathVariable("id")int id) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.updateTournamentData(id, name, date, content, image, discipline, status, result, prizepool);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
+    @DeleteMapping("/deleteTournament/{id}")
+    public ResponseEntity<?> deleteTournament(@AuthenticationPrincipal UserDetails userDetails,
+                                          @PathVariable("id") int id) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.deleteTournament(id);
             if (error == null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Success");
             } else {
