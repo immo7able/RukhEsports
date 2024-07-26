@@ -333,7 +333,7 @@ public class AdminService {
             tournament.setPrizepool(prizepool);
             tournament.setResult(result);
             tournament.setStatus(status);
-            tournament.setDiscipline(discipline);
+            tournament.setDiscipline(discipline.toLowerCase());
             tournamentRepository.save(tournament);
             return null;
         }
@@ -385,7 +385,7 @@ public class AdminService {
             tournament.setPrizepool(prizepool);
             tournament.setResult(result);
             tournament.setStatus(status);
-            tournament.setDiscipline(discipline);
+            tournament.setDiscipline(discipline.toLowerCase());
             tournamentRepository.save(tournament);
             return null;
         }
@@ -447,7 +447,7 @@ public class AdminService {
             image.transferTo(new File(uploadPath+"/"+resultImageName));
             Matches matches = new Matches();
             matches.setTitle(title);
-            matches.setDiscipline(discipline);
+            matches.setDiscipline(discipline.toLowerCase());
             matches.setDate(date);
             matches.setImg(resultImageName);
             matches.setYoutubeUrl(youtubeUrl);
@@ -504,7 +504,7 @@ public class AdminService {
             image.transferTo(new File(uploadPath+"/"+resultImageName));
             Matches matches = matchesRepository.getMatchesById(id);
             matches.setTitle(title);
-            matches.setDiscipline(discipline);
+            matches.setDiscipline(discipline.toLowerCase());
             matches.setDate(date);
             matches.setImg(resultImageName);
             matches.setYoutubeUrl(youtubeUrl);

@@ -14,8 +14,8 @@ public class MatchesDTO {
     private String status;
     private String img;
     private String discipline;
-    private Team team1;
-    private Team team2;
+    private TeamDTO team1;
+    private TeamDTO team2;
     private Tournament tournament;
 
     public Long getId() {
@@ -82,19 +82,19 @@ public class MatchesDTO {
         this.discipline = discipline;
     }
 
-    public Team getTeam1() {
+    public TeamDTO getTeam1() {
         return team1;
     }
 
-    public void setTeam1(Team team1) {
+    public void setTeam1(TeamDTO team1) {
         this.team1 = team1;
     }
 
-    public Team getTeam2() {
+    public TeamDTO getTeam2() {
         return team2;
     }
 
-    public void setTeam2(Team team2) {
+    public void setTeam2(TeamDTO team2) {
         this.team2 = team2;
     }
 

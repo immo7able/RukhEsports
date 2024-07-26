@@ -1,5 +1,10 @@
 package org.example.rukh.model.DTO;
 
+import org.example.rukh.model.Player;
+import org.example.rukh.model.Team;
+
+import java.util.List;
+
 public class TeamDTO {
     private Long id;
 
@@ -7,6 +12,25 @@ public class TeamDTO {
     private String discipline;
     private String content;
     private String img;
+    private List<PlayerDTO> players;
+
+    public TeamDTO(Team team) {
+        this.id=team.getId();
+        this.name=team.getName();
+        this.discipline=team.getDiscipline();
+        this.content=team.getContent();
+        this.img=team.getImg();
+    }
+    public TeamDTO() {
+    }
+
+    public List<PlayerDTO> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<PlayerDTO> players) {
+        this.players = players;
+    }
 
     public Long getId() {
         return id;

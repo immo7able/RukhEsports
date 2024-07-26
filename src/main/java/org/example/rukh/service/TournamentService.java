@@ -20,6 +20,15 @@ public class TournamentService {
         List<Tournament> tournamentsList = tournamentRepository.findAll();
         return tournamentsList.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
+    public List<TournamentDTO> getTournamentsByDiscipline(String discipline) {
+        discipline=discipline.toLowerCase();
+        List<Tournament> tournamentsList = tournamentRepository.getTournamentByDiscipline(discipline);
+        return tournamentsList.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+    public TournamentDTO getTournamentById(int id) {
+        Tournament tournament = tournamentRepository.getTournamentById(id);
+        return convertToDTO(tournament);
+    }
     private TournamentDTO convertToDTO(Tournament tournament) {
         TournamentDTO tournamentDTO = new TournamentDTO();
         tournamentDTO.setId(tournament.getId());
