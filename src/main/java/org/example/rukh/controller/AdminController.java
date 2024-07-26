@@ -250,4 +250,71 @@ public class AdminController {
             }
         }
     }
+    @PostMapping("/createMatch")
+    public ResponseEntity<?> createMatch(@RequestParam("title") String title,
+                                         @RequestParam("date")String date,
+                                         @RequestParam("discipline") String discipline,
+                                         @RequestParam("image") MultipartFile image,
+                                         @RequestParam("result") String result,
+                                         @RequestParam("status") String status,
+                                         @RequestParam("youtubeUrl")String youtubeUrl,
+                                         @RequestParam("tournamentId") int tournamentId,
+                                         @RequestParam("team1Id") int team1Id,
+                                         @RequestParam("team2Id") int team2Id,
+                                         @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.validateMatchData(title, date, discipline, image, result, status, youtubeUrl,tournamentId, team1Id, team2Id);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
+    @PutMapping("/updateMatch/{id}")
+    public ResponseEntity<?> updateMatch(@RequestParam("title") String title,
+                                         @RequestParam("date")String date,
+                                         @RequestParam("discipline") String discipline,
+                                         @RequestParam("image") MultipartFile image,
+                                         @RequestParam("result") String result,
+                                         @RequestParam("status") String status,
+                                         @RequestParam("youtubeUrl")String youtubeUrl,
+                                         @RequestParam("tournamentId") int tournamentId,
+                                         @RequestParam("team1Id") int team1Id,
+                                         @RequestParam("team2Id") int team2Id,
+                                         @AuthenticationPrincipal UserDetails userDetails,
+                                         @PathVariable("id")int id) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.updateMatchData(id, title, date, discipline, image, result, status, youtubeUrl, tournamentId, team1Id, team2Id);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
+    @DeleteMapping("/deleteMatch/{id}")
+    public ResponseEntity<?> deleteMatch(@AuthenticationPrincipal UserDetails userDetails,
+                                              @PathVariable("id") int id) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.deleteMatch(id);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
 }

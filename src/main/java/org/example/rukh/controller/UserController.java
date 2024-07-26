@@ -1,14 +1,10 @@
 package org.example.rukh.controller;
 
 
-import jakarta.servlet.http.HttpSession;
-import org.example.rukh.model.UserProfileDTO;
 import org.example.rukh.service.UserService;
 import org.example.rukh.model.User;
 import org.example.rukh.utils.JwtUtil;
-import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

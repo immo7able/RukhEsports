@@ -1,7 +1,7 @@
 package org.example.rukh.controller;
 
 import org.example.rukh.model.User;
-import org.example.rukh.model.UserProfileDTO;
+import org.example.rukh.model.DTO.UserProfileDTO;
 import org.example.rukh.service.ProfileService;
 import org.example.rukh.service.UserService;
 import org.example.rukh.utils.JwtUtil;
@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
 import java.util.Collections;
 import java.util.Map;
 

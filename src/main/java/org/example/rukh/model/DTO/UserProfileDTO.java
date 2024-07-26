@@ -1,4 +1,4 @@
-package org.example.rukh.model;
+package org.example.rukh.model.DTO;
 
 public class UserProfileDTO {
     private String email;

@@ -14,7 +14,7 @@ public class Matches {
 
     private String title;
     private String result;
-    private Date date;
+    private String date;
     private String youtubeUrl;
     private String status;
     private String img;
@@ -103,11 +103,11 @@ public class Matches {
         this.result = result;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

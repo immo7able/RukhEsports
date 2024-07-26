@@ -1,10 +1,7 @@
 package org.example.rukh.service;
 
 import jakarta.transaction.Transactional;
-import org.example.rukh.model.News;
-import org.example.rukh.model.Player;
-import org.example.rukh.model.Team;
-import org.example.rukh.model.Tournament;
+import org.example.rukh.model.*;
 import org.example.rukh.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +25,8 @@ public class AdminService {
     private PlayerRepository playerRepository;
     @Autowired
     private TournamentRepository tournamentRepository;
+    @Autowired
+    private MatchesRepository matchesRepository;
     @Value("${upload.path}")
     private String uploadPath;
     private static final Pattern ALLOWED_CHARACTERS_PATTERN = Pattern.compile("^[a-zA-Z0-9.@_]+$");
@@ -401,7 +400,134 @@ public class AdminService {
                 throw new Exception("Неправильный id");
             }
             Tournament tournament = tournamentRepository.getTournamentById(id);
+            if(matchesRepository.existsByTournament(tournament))
+                matchesRepository.deleteAllByTournament(tournament);
             tournamentRepository.delete(tournament);
+            return null;
+        }
+        catch (Exception e){
+            return "Ошибка при обновлении: "+e.getMessage();
+        }
+    }
+    public String validateMatchData(String title, String date, String discipline, MultipartFile image, String result, String status, String youtubeUrl, int tournamentId, int team1Id, int team2Id){
+        try{
+            if (title.isEmpty()) {
+                throw new Exception("Пустое название");
+            }
+            if (date.isEmpty()) {
+                throw new Exception("Пустая дата");
+            }
+            if (!discipline.equalsIgnoreCase("pubg")&&!discipline.equalsIgnoreCase("mob")&&!discipline.equalsIgnoreCase("hok")) {
+                throw new Exception("Неверная дисциплина");
+            }
+            if ((image == null) || image.getOriginalFilename().isEmpty()) {
+                throw new Exception("Картинка пустая");
+            }
+            if (result.isEmpty()) {
+                throw new Exception("Пустой результат");
+            }
+            if (!status.equalsIgnoreCase("ongoing")&&!status.equalsIgnoreCase("upcoming")&&!status.equalsIgnoreCase("completed")) {
+                throw new Exception("Неверная дисциплина");
+            }
+            if(!tournamentRepository.existsById(tournamentId)){
+                throw new Exception("Турнир не существует");
+            }
+            if(!teamRepository.existsById(team1Id)){
+                throw new Exception("Команда 1 не существует");
+            }
+            if(!teamRepository.existsById(team2Id)){
+                throw new Exception("Команда 2 не существует");
+            }
+            File uploadDir = new File(uploadPath);
+            if(!uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+            String UUIDAvatar = UUID.randomUUID().toString();
+            String resultImageName = UUIDAvatar+"."+image.getOriginalFilename();
+            image.transferTo(new File(uploadPath+"/"+resultImageName));
+            Matches matches = new Matches();
+            matches.setTitle(title);
+            matches.setDiscipline(discipline);
+            matches.setDate(date);
+            matches.setImg(resultImageName);
+            matches.setYoutubeUrl(youtubeUrl);
+            matches.setResult(result);
+            matches.setStatus(status);
+            matches.setTeam1(teamRepository.getTeamById(team1Id));
+            matches.setTeam2(teamRepository.getTeamById(team2Id));
+            matches.setTournament(tournamentRepository.getTournamentById(tournamentId));
+            matchesRepository.save(matches);
+            return null;
+        }
+        catch (Exception e){
+            return "Ошибка при создании: "+e.getMessage();
+        }
+    }
+    public String updateMatchData(int id, String title, String date, String discipline, MultipartFile image, String result, String status, String youtubeUrl, int tournamentId, int team1Id, int team2Id){
+        try{
+            if(!matchesRepository.existsById(id)){
+                throw new Exception("Неверный матч");
+            }
+            if (title.isEmpty()) {
+                throw new Exception("Пустое название");
+            }
+            if (date.isEmpty()) {
+                throw new Exception("Пустая дата");
+            }
+            if (!discipline.equalsIgnoreCase("pubg")&&!discipline.equalsIgnoreCase("mob")&&!discipline.equalsIgnoreCase("hok")) {
+                throw new Exception("Неверная дисциплина");
+            }
+            if ((image == null) || image.getOriginalFilename().isEmpty()) {
+                throw new Exception("Картинка пустая");
+            }
+            if (result.isEmpty()) {
+                throw new Exception("Пустой результат");
+            }
+            if (!status.equalsIgnoreCase("ongoing")&&!status.equalsIgnoreCase("upcoming")&&!status.equalsIgnoreCase("completed")) {
+                throw new Exception("Неверная дисциплина");
+            }
+            if(!tournamentRepository.existsById(tournamentId)){
+                throw new Exception("Турнир не существует");
+            }
+            if(!teamRepository.existsById(team1Id)){
+                throw new Exception("Команда 1 не существует");
+            }
+            if(!teamRepository.existsById(team2Id)){
+                throw new Exception("Команда 2 не существует");
+            }
+            File uploadDir = new File(uploadPath);
+            if(!uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+            String UUIDAvatar = UUID.randomUUID().toString();
+            String resultImageName = UUIDAvatar+"."+image.getOriginalFilename();
+            image.transferTo(new File(uploadPath+"/"+resultImageName));
+            Matches matches = matchesRepository.getMatchesById(id);
+            matches.setTitle(title);
+            matches.setDiscipline(discipline);
+            matches.setDate(date);
+            matches.setImg(resultImageName);
+            matches.setYoutubeUrl(youtubeUrl);
+            matches.setResult(result);
+            matches.setStatus(status);
+            matches.setTeam1(teamRepository.getTeamById(team1Id));
+            matches.setTeam2(teamRepository.getTeamById(team2Id));
+            matches.setTournament(tournamentRepository.getTournamentById(tournamentId));
+            matchesRepository.save(matches);
+            return null;
+        }
+        catch (Exception e){
+            return "Ошибка при создании: "+e.getMessage();
+        }
+    }
+    @Transactional
+    public String deleteMatch(int id){
+        try{
+            if(!matchesRepository.existsById(id)){
+                throw new Exception("Неправильный id");
+            }
+            Matches match = matchesRepository.getMatchesById(id);
+            matchesRepository.delete(match);
             return null;
         }
         catch (Exception e){
