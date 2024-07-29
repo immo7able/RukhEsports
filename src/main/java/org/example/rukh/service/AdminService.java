@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -626,6 +627,24 @@ public class AdminService {
         }
         catch (Exception e){
             return "Ошибка при создании: "+e.getMessage();
+        }
+    }
+    @Transactional
+    public String deleteComment(int id){
+        try{
+            if(!commentRepository.existsById(id)){
+                throw new Exception("Неправильный id");
+            }
+            Comment comment = commentRepository.getCommentById(id);
+            List<Comment> comments = commentRepository.getCommentsByParentCommentId(id);
+            if(!comments.isEmpty()) {
+                commentRepository.deleteAll(comments);
+            }
+            commentRepository.delete(comment);
+            return null;
+        }
+        catch (Exception e){
+            return "Ошибка при обновлении: "+e.getMessage();
         }
     }
 }

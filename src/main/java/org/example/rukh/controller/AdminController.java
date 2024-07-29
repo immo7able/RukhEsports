@@ -385,4 +385,21 @@ public class AdminController {
             }
         }
     }
+    @DeleteMapping("/deleteComment/{id}")
+    public ResponseEntity<?> deleteComment(@AuthenticationPrincipal UserDetails userDetails,
+                                         @PathVariable("id") int id) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.deleteComment(id);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
+
 }

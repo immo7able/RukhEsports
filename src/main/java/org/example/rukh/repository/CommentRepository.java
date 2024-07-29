@@ -13,6 +13,10 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     @Query(value = "SELECT * FROM comments c WHERE c.news_id=:id", nativeQuery = true)
     List<Comment> getCommentsById(@Param("id") int id);
+    @Query(value = "SELECT * FROM comments c WHERE c.id=:id", nativeQuery = true)
+    Comment getCommentById(@Param("id") int id);
+    @Query(value = "SELECT * FROM comments c WHERE c.parent_comment_id=:id", nativeQuery = true)
+    List<Comment> getCommentsByParentCommentId(int id);
     void deleteAllByNews(News news);
     boolean existsByNews(News news);
 }

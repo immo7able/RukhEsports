@@ -6,7 +6,9 @@ import org.example.rukh.service.ProfileService;
 import org.example.rukh.service.UserService;
 import org.example.rukh.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -69,5 +71,19 @@ public class ProfileController {
             return ResponseEntity.ok().body(Map.of("avatar","/uploads/"+user.getAvatar()));
         }else return ResponseEntity.badRequest().body(Collections.singletonMap("error", error));
     }
+    /*@DeleteMapping("/deleteComment/{id}")
+    public ResponseEntity<?> deleteComment(@AuthenticationPrincipal UserDetails userDetails,
+                                           @PathVariable("id") int id) {
+        if (userDetails==null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not your comment");
+        } else {
+            String error = adminService.deleteComment(id);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }*/
 
 }
