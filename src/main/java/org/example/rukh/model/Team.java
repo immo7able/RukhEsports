@@ -13,6 +13,15 @@ public class Team {
     private String discipline;
     private String content;
     private String img;
+    private boolean rukh;
+
+    public boolean isRukh() {
+        return rukh;
+    }
+
+    public void setRukh(boolean rukh) {
+        this.rukh = rukh;
+    }
 
     public String getDiscipline() {
         return discipline;

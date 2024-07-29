@@ -2,8 +2,10 @@ package org.example.rukh.service;
 
 import org.example.rukh.model.DTO.TeamDTO;
 import org.example.rukh.model.DTO.TournamentDTO;
+import org.example.rukh.model.Matches;
 import org.example.rukh.model.Team;
 import org.example.rukh.model.Tournament;
+import org.example.rukh.repository.MatchesRepository;
 import org.example.rukh.repository.TeamRepository;
 import org.example.rukh.repository.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,7 @@ public class TournamentService {
         tournamentDTO.setPrizepool(tournament.getPrizepool());
         tournamentDTO.setResult(tournament.getResult());
         tournamentDTO.setStatus(tournament.getStatus());
+        tournamentDTO.setTeams(List.of());
         return tournamentDTO;
     }
 }

@@ -1,5 +1,7 @@
 package org.example.rukh.model.DTO;
 
+import java.util.List;
+
 public class TournamentDTO {
     private Long id;
     private String name;
@@ -10,6 +12,15 @@ public class TournamentDTO {
     private String discipline;
     private String date;
     private String prizepool;
+    private List<TeamDTO> teams;
+
+    public List<TeamDTO> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<TeamDTO> teams) {
+        this.teams = teams;
+    }
 
     public Long getId() {
         return id;

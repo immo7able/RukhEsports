@@ -1,6 +1,8 @@
 package org.example.rukh.service;
 
 import org.example.rukh.model.Comment;
+import org.example.rukh.model.DTO.CommentDTO;
+import org.example.rukh.model.DTO.NewsDTO;
 import org.example.rukh.model.News;
 import org.example.rukh.model.User;
 import org.example.rukh.repository.CommentRepository;
@@ -15,6 +17,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -24,8 +27,9 @@ public class CommentService {
     private UserRepository userRepository;
     @Autowired
     private NewsRepository newsRepository;
-    public List<Comment> getCommentsById(int id) {
-        return commentRepository.getCommentsById(id);
+    public List<CommentDTO> getCommentsById(int id) {
+        List<Comment> commentList = commentRepository.getCommentsById(id);
+        return commentList.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
     public String validateCommentData(int id, String text, int parent_comment_id, UserDetails userDetails){
         try{
@@ -46,5 +50,14 @@ public class CommentService {
         catch (Exception e){
             return "Ошибка при создании: "+e.getMessage();
         }
+    }
+    private CommentDTO convertToDTO(Comment comment) {
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setId(comment.getId());
+        commentDTO.setContent(comment.getContent());
+        commentDTO.setAvatar("/uploads/"+comment.getUser().getAvatar());
+        commentDTO.setDate(comment.getDate());
+        commentDTO.setNickname(comment.getUser().getNickname());
+        return commentDTO;
     }
 }

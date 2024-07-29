@@ -1,6 +1,7 @@
 package org.example.rukh.controller;
 
 import org.example.rukh.model.Comment;
+import org.example.rukh.model.DTO.CommentDTO;
 import org.example.rukh.model.DTO.NewsDTO;
 import org.example.rukh.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class CommentController {
     @Autowired
     CommentService commentService;
     @GetMapping("/{id}")
-    public ResponseEntity<List<Comment>> getComments(@PathVariable(value="id") int id) {
-        List<Comment> comments = commentService.getCommentsById(id);
+    public ResponseEntity<List<CommentDTO>> getComments(@PathVariable(value="id") int id) {
+        List<CommentDTO> comments = commentService.getCommentsById(id);
         return ResponseEntity.ok(comments);
     }
     @PostMapping("/{id}")

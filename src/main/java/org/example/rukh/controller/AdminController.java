@@ -317,4 +317,72 @@ public class AdminController {
             }
         }
     }
+    @PostMapping("/uploadSliderImage")
+    public ResponseEntity<?> uploadSliderImage(@RequestParam("image") MultipartFile image,
+                                            @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.uploadSliderImage(image);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
+    @PutMapping("/updateSliderImage")
+    public ResponseEntity<?> updateSliderImage(@RequestParam("image") MultipartFile image,
+                                         @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.updateSliderImage(image);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
+    @PostMapping("/uploadTopImage")
+    public ResponseEntity<?> uploadTopImage(@RequestParam("image") MultipartFile image,
+                                               @RequestParam("page") String page,
+                                               @RequestParam("tab") String tab,
+                                               @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.uploadTopImage(image, page, tab);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
+    @PutMapping("/updateTopImage")
+    public ResponseEntity<?> updateTopImage(@RequestParam("image") MultipartFile image,
+                                               @RequestParam("page") String page,
+                                               @RequestParam("tab") String tab,
+                                               @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails==null||userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
+        } else {
+            String error = adminService.updateTopImage(image, page, tab);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
+        }
+    }
 }

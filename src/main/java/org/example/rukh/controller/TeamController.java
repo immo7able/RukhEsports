@@ -24,9 +24,14 @@ public class TeamController {
         List<TeamDTO> teams = teamService.getAllTeams();
         return ResponseEntity.ok(teams);
     }
-    @GetMapping("/{discipline}")
-    public ResponseEntity<TeamDTO> getTeamByDiscipline(@PathVariable("discipline") String discipline) {
-        TeamDTO team = teamService.getTeamByDiscipline(discipline);
+    @GetMapping("/{discipline}/rukh")
+    public ResponseEntity<TeamDTO> getTeamByDisciplineAndRukh(@PathVariable("discipline") String discipline) {
+        TeamDTO team = teamService.getTeamByDisciplineAndRukh(discipline);
         return ResponseEntity.ok(team);
+    }
+    @GetMapping("/{discipline}")
+    public ResponseEntity<List<TeamDTO>> getTeamsByDiscipline(@PathVariable("discipline") String discipline) {
+        List<TeamDTO> teams = teamService.getTeamsByDiscipline(discipline);
+        return ResponseEntity.ok(teams);
     }
 }

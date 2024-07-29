@@ -24,10 +24,15 @@ public class TeamService {
         List<Team> teamList = teamRepository.findAll();
         return teamList.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
-    public TeamDTO getTeamByDiscipline(String discipline) {
+    public TeamDTO getTeamByDisciplineAndRukh(String discipline) {
         discipline=discipline.toLowerCase();
-        Team team = teamRepository.getTeamByDiscipline(discipline);
+        Team team = teamRepository.getTeamByDisciplineAndRukh(discipline);
         return convertToDTO(team);
+    }
+    public List<TeamDTO> getTeamsByDiscipline(String discipline) {
+        discipline=discipline.toLowerCase();
+        List<Team> teams = teamRepository.getTeamsByDiscipline(discipline);
+        return teams.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
     private TeamDTO convertToDTO(Team team) {
         TeamDTO teamDTO = new TeamDTO();

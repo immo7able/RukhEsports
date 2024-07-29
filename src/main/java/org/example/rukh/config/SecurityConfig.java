@@ -36,10 +36,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())  // Отключение защиты CSRF
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Настройка управления сессиями как stateless
-                .authorizeHttpRequests(authorize -> authorize
+                .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/login", "/api/register").permitAll()
-                        .requestMatchers("/api/profile", "/api/logout","/api/admin/").authenticated()
-                        .requestMatchers("/api/admin").hasRole("ADMIN")
+                        .requestMatchers("/api/profile", "/api/logout").authenticated()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll()
                 );
 

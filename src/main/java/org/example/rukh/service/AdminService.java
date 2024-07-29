@@ -27,6 +27,8 @@ public class AdminService {
     private TournamentRepository tournamentRepository;
     @Autowired
     private MatchesRepository matchesRepository;
+    @Autowired
+    private GalleryRepository galleryRepository;
     @Value("${upload.path}")
     private String uploadPath;
     private static final Pattern ALLOWED_CHARACTERS_PATTERN = Pattern.compile("^[a-zA-Z0-9.@_]+$");
@@ -306,9 +308,6 @@ public class AdminService {
             if (prizepool.isEmpty()) {
                 throw new Exception("Пустой призовой фонд");
             }
-            if (result.isEmpty()) {
-                throw new Exception("Пустой результат");
-            }
             if (!discipline.equalsIgnoreCase("pubg")&&!discipline.equalsIgnoreCase("mob")&&!discipline.equalsIgnoreCase("hok")) {
                 throw new Exception("Неверная дисциплина");
             }
@@ -357,9 +356,6 @@ public class AdminService {
             }
             if (prizepool.isEmpty()) {
                 throw new Exception("Пустой призовой фонд");
-            }
-            if (result.isEmpty()) {
-                throw new Exception("Пустой результат");
             }
             if (!discipline.equalsIgnoreCase("pubg")&&!discipline.equalsIgnoreCase("mob")&&!discipline.equalsIgnoreCase("hok")) {
                 throw new Exception("Неверная дисциплина");
@@ -423,9 +419,6 @@ public class AdminService {
             if ((image == null) || image.getOriginalFilename().isEmpty()) {
                 throw new Exception("Картинка пустая");
             }
-            if (result.isEmpty()) {
-                throw new Exception("Пустой результат");
-            }
             if (!status.equalsIgnoreCase("ongoing")&&!status.equalsIgnoreCase("upcoming")&&!status.equalsIgnoreCase("completed")) {
                 throw new Exception("Неверная дисциплина");
             }
@@ -480,9 +473,6 @@ public class AdminService {
             if ((image == null) || image.getOriginalFilename().isEmpty()) {
                 throw new Exception("Картинка пустая");
             }
-            if (result.isEmpty()) {
-                throw new Exception("Пустой результат");
-            }
             if (!status.equalsIgnoreCase("ongoing")&&!status.equalsIgnoreCase("upcoming")&&!status.equalsIgnoreCase("completed")) {
                 throw new Exception("Неверная дисциплина");
             }
@@ -532,6 +522,110 @@ public class AdminService {
         }
         catch (Exception e){
             return "Ошибка при обновлении: "+e.getMessage();
+        }
+    }
+    public String uploadSliderImage(MultipartFile image){
+        try{
+            if ((image == null) || image.getOriginalFilename().isEmpty()) {
+                throw new Exception("Картинка пустая");
+            }
+            File uploadDir = new File(uploadPath);
+            if(!uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+            String UUIDAvatar = UUID.randomUUID().toString();
+            String resultImageName = UUIDAvatar+"."+image.getOriginalFilename();
+            image.transferTo(new File(uploadPath+"/"+resultImageName));
+            Gallery gallery = new Gallery();
+            gallery.setImg(resultImageName);
+            gallery.setSlider(true);
+            galleryRepository.save(gallery);
+            return null;
+        }
+        catch (Exception e){
+            return "Ошибка при создании: "+e.getMessage();
+        }
+    }
+    public String updateSliderImage(MultipartFile image){
+        try{
+            if(!galleryRepository.existsBySlider(true)){
+                throw new Exception("Не существует картинки для обновления");
+            }
+            if ((image == null) || image.getOriginalFilename().isEmpty()) {
+                throw new Exception("Картинка пустая");
+            }
+            File uploadDir = new File(uploadPath);
+            if(!uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+            String UUIDAvatar = UUID.randomUUID().toString();
+            String resultImageName = UUIDAvatar+"."+image.getOriginalFilename();
+            image.transferTo(new File(uploadPath+"/"+resultImageName));
+            Gallery gallery = galleryRepository.getSliderImage();
+            gallery.setImg(resultImageName);
+            gallery.setSlider(true);
+            galleryRepository.save(gallery);
+            return null;
+        }
+        catch (Exception e){
+            return "Ошибка при создании: "+e.getMessage();
+        }
+    }
+    public String uploadTopImage(MultipartFile image, String page, String tab){
+        try{
+            if ((image == null) || image.getOriginalFilename().isEmpty()) {
+                throw new Exception("Картинка пустая");
+            }
+            if (page.isEmpty()) {
+                throw new Exception("Неправильная страница");
+            }
+            if (tab.isEmpty()) {
+                throw new Exception("Неправильная вкладка");
+            }
+            File uploadDir = new File(uploadPath);
+            if(!uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+            String UUIDAvatar = UUID.randomUUID().toString();
+            String resultImageName = UUIDAvatar+"."+image.getOriginalFilename();
+            image.transferTo(new File(uploadPath+"/"+resultImageName));
+            Gallery gallery = new Gallery();
+            gallery.setImg(resultImageName);
+            gallery.setSlider(false);
+            gallery.setPage(page);
+            gallery.setDiscipline(tab);
+            galleryRepository.save(gallery);
+            return null;
+        }
+        catch (Exception e){
+            return "Ошибка при создании: "+e.getMessage();
+        }
+    }
+    public String updateTopImage(MultipartFile image, String page, String tab){
+        try{
+            if(!galleryRepository.existsByPageAndDiscipline(page, tab)){
+                throw new Exception("Не существует картинки для обновления");
+            }
+            if ((image == null) || image.getOriginalFilename().isEmpty()) {
+                throw new Exception("Картинка пустая");
+            }
+            File uploadDir = new File(uploadPath);
+            if(!uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+            String UUIDAvatar = UUID.randomUUID().toString();
+            String resultImageName = UUIDAvatar+"."+image.getOriginalFilename();
+            image.transferTo(new File(uploadPath+"/"+resultImageName));
+            Gallery gallery = galleryRepository.getTopImage(page, tab);
+            gallery.setImg(resultImageName);
+            gallery.setSlider(false);
+            gallery.setPage(page);
+            gallery.setDiscipline(tab);
+            galleryRepository.save(gallery);
+            return null;
+        }
+        catch (Exception e){
+            return "Ошибка при создании: "+e.getMessage();
         }
     }
 }
