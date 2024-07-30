@@ -2,6 +2,7 @@ package org.example.rukh.repository;
 
 
 import org.example.rukh.model.News;
+import org.example.rukh.model.Tournament;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,5 +19,7 @@ public interface NewsRepository extends JpaRepository<News, Integer> {
     News getNewsById(@Param("discipline") String discipline,@Param("id") int id);
     @Query(value = "SELECT * FROM news n WHERE n.id=:id", nativeQuery = true)
     News getNewsById(@Param("id") int id);
+    void deleteAllByTournament(Tournament tournament);
+    boolean existsByTournament(Tournament tournament);
 
 }

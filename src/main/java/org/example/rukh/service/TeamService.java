@@ -27,7 +27,10 @@ public class TeamService {
     public TeamDTO getTeamByDisciplineAndRukh(String discipline) {
         discipline=discipline.toLowerCase();
         Team team = teamRepository.getTeamByDisciplineAndRukh(discipline);
-        return convertToDTO(team);
+        if(team!=null){
+            return convertToDTO(team);
+        }
+        else return null;
     }
     public List<TeamDTO> getTeamsByDiscipline(String discipline) {
         discipline=discipline.toLowerCase();

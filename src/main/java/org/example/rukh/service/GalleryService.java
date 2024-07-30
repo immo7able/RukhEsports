@@ -11,12 +11,16 @@ public class GalleryService {
     private GalleryRepository galleryRepository;
     public Gallery getSliderImage(){
         Gallery gallery=galleryRepository.getSliderImage();
-        gallery.setImg("/uploads/"+gallery.getImg());
+        if(gallery!=null){
+            gallery.setImg("/uploads/"+gallery.getImg());
+        }
         return gallery;
     }
     public Gallery getTopImage(String page, String tab){
         Gallery gallery = galleryRepository.getTopImage(page, tab);
-        gallery.setImg("/uploads/"+gallery.getImg());
+        if(gallery!=null) {
+            gallery.setImg("/uploads/" + gallery.getImg());
+        }
         return gallery;
     }
 }

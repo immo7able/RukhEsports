@@ -23,13 +23,14 @@ public class AdminController {
                                         @RequestParam("discipline") String discipline,
                                         @RequestParam("title") String title,
                                         @RequestParam("image") MultipartFile image,
+                                        @RequestParam("tournament") int tournament_id,
                                         @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails==null||userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
         } else {
-            String error = adminService.validateNewsData(discipline, content, title, image);
+            String error = adminService.validateNewsData(discipline, content, title, image, tournament_id);
             if (error == null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Success");
             } else {
@@ -78,13 +79,14 @@ public class AdminController {
                                         @RequestParam("discipline") String discipline,
                                         @RequestParam("name") String name,
                                         @RequestParam("image") MultipartFile image,
+                                        @RequestParam("rukh") boolean rukh,
                                         @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails==null||userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
         } else {
-            String error = adminService.validateTeamData(discipline, content, name, image);
+            String error = adminService.validateTeamData(discipline, content, name, image, rukh);
             if (error == null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Success");
             } else {

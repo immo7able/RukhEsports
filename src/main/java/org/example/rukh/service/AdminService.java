@@ -33,7 +33,7 @@ public class AdminService {
     @Value("${upload.path}")
     private String uploadPath;
     private static final Pattern ALLOWED_CHARACTERS_PATTERN = Pattern.compile("^[a-zA-Z0-9.@_]+$");
-    public String validateNewsData(String category, String content, String title, MultipartFile image){
+    public String validateNewsData(String category, String content, String title, MultipartFile image, int tournament_id){
         try{
             if (!category.equalsIgnoreCase("pubg")&&!category.equalsIgnoreCase("mob")&&!category.equalsIgnoreCase("hok")) {
                 throw new Exception("Неверная категория");
@@ -46,6 +46,9 @@ public class AdminService {
             }
             if ((image == null) || image.getOriginalFilename().isEmpty()) {
                 throw new Exception("Картинка пустая");
+            }
+            if(tournamentRepository.getTournamentById(tournament_id)==null){
+                throw new Exception("Турнир не существует");
             }
             File uploadDir = new File(uploadPath);
             if(!uploadDir.exists()){
@@ -60,6 +63,7 @@ public class AdminService {
             news.setTitle(title);
             news.setImage(resultImageName);
             news.setDate(new Date());
+            news.setTournament(tournamentRepository.getTournamentById(tournament_id));
             newsRepository.save(news);
             return null;
         }
@@ -120,7 +124,7 @@ public class AdminService {
             return "Ошибка при обновлении: "+e.getMessage();
         }
     }
-    public String validateTeamData(String category, String content, String name, MultipartFile image){
+    public String validateTeamData(String category, String content, String name, MultipartFile image, boolean rukh){
         try{
             if (!category.equalsIgnoreCase("pubg")&&!category.equalsIgnoreCase("mob")&&!category.equalsIgnoreCase("hok")) {
                 throw new Exception("Неверная категория");
@@ -146,6 +150,7 @@ public class AdminService {
             team.setContent(content);
             team.setName(name);
             team.setImg(resultImageName);
+            team.setRukh(rukh);
             teamRepository.save(team);
             return null;
         }
@@ -399,6 +404,8 @@ public class AdminService {
             Tournament tournament = tournamentRepository.getTournamentById(id);
             if(matchesRepository.existsByTournament(tournament))
                 matchesRepository.deleteAllByTournament(tournament);
+            if(newsRepository.existsByTournament(tournament))
+                newsRepository.deleteAllByTournament(tournament);
             tournamentRepository.delete(tournament);
             return null;
         }
