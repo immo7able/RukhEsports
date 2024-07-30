@@ -203,6 +203,9 @@ public class AdminService {
             Team team = teamRepository.getTeamById(id);
             if(playerRepository.existsByTeam(team))
                 playerRepository.deleteAllByTeam(team);
+            if(matchesRepository.existsByTeam1OrTeam2(team, team)){
+                matchesRepository.deleteAll(matchesRepository.getMatchesByTeam1OrTeam2(team, team));
+            }
             teamRepository.delete(team);
             return null;
         }
@@ -405,7 +408,8 @@ public class AdminService {
             if(matchesRepository.existsByTournament(tournament))
                 matchesRepository.deleteAllByTournament(tournament);
             if(newsRepository.existsByTournament(tournament))
-                newsRepository.deleteAllByTournament(tournament);
+                for(News news: newsRepository.getNewsByTournament(tournament))
+                    deleteNews(news.getId().intValue());
             tournamentRepository.delete(tournament);
             return null;
         }

@@ -21,5 +21,6 @@ public interface NewsRepository extends JpaRepository<News, Integer> {
     News getNewsById(@Param("id") int id);
     void deleteAllByTournament(Tournament tournament);
     boolean existsByTournament(Tournament tournament);
+    List<News> getNewsByTournament(Tournament tournament);
 
 }
