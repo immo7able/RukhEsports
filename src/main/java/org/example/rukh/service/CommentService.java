@@ -1,5 +1,6 @@
 package org.example.rukh.service;
 
+import jakarta.transaction.Transactional;
 import org.example.rukh.model.Comment;
 import org.example.rukh.model.DTO.CommentDTO;
 import org.example.rukh.model.DTO.NewsDTO;
@@ -45,6 +46,19 @@ public class CommentService {
             comment.setParent_comment_id(parent_comment_id);
             comment.setDate(new Date());
             commentRepository.save(comment);
+            return null;
+        }
+        catch (Exception e){
+            return "Ошибка при создании: "+e.getMessage();
+        }
+    }
+    @Transactional
+    public String deleteComment(int id, UserDetails userDetails){
+        try{
+            User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() ->  new IllegalArgumentException("User not found"));
+            Comment comment = commentRepository.getCommentById(id);
+            if(user.getId().equals(comment.getId()))
+                commentRepository.delete(comment);
             return null;
         }
         catch (Exception e){

@@ -18,5 +18,6 @@ public interface TeamRepository extends JpaRepository<Team, Integer> {
     Team getTeamByDisciplineAndRukh(@Param("discipline") String discipline);
     @Query(value = "SELECT * FROM team t WHERE t.discipline=:discipline", nativeQuery = true)
     List<Team> getTeamsByDiscipline(@Param("discipline") String discipline);
+    boolean existsByDisciplineAndRukh(String discipline, boolean rukh);
 
 }

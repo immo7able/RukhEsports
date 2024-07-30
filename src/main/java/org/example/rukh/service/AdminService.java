@@ -33,7 +33,41 @@ public class AdminService {
     @Value("${upload.path}")
     private String uploadPath;
     private static final Pattern ALLOWED_CHARACTERS_PATTERN = Pattern.compile("^[a-zA-Z0-9.@_]+$");
-    public String validateNewsData(String category, String content, String title, MultipartFile image, int tournament_id){
+    public String validateNewsData(String category, String content, String title, MultipartFile image){
+        try{
+            if (!category.equalsIgnoreCase("pubg")&&!category.equalsIgnoreCase("mob")&&!category.equalsIgnoreCase("hok")) {
+                throw new Exception("Неверная категория");
+            }
+            if (content.isEmpty()) {
+                throw new Exception("Пустая новость");
+            }
+            if (title.isEmpty()) {
+                throw new Exception("Пустой заголовок");
+            }
+            if ((image == null) || image.getOriginalFilename().isEmpty()) {
+                throw new Exception("Картинка пустая");
+            }
+            File uploadDir = new File(uploadPath);
+            if(!uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+            String UUIDAvatar = UUID.randomUUID().toString();
+            String resultImageName = UUIDAvatar+"."+image.getOriginalFilename();
+            image.transferTo(new File(uploadPath+"/"+resultImageName));
+            News news = new News();
+            news.setCategory(category.toLowerCase());
+            news.setContent(content);
+            news.setTitle(title);
+            news.setImage(resultImageName);
+            news.setDate(new Date());
+            newsRepository.save(news);
+            return null;
+        }
+        catch (Exception e){
+            return "Ошибка при создании: "+e.getMessage();
+        }
+    }
+    public String validateNewsData(String category, String content, String title, MultipartFile image, Integer tournament_id){
         try{
             if (!category.equalsIgnoreCase("pubg")&&!category.equalsIgnoreCase("mob")&&!category.equalsIgnoreCase("hok")) {
                 throw new Exception("Неверная категория");
@@ -63,7 +97,8 @@ public class AdminService {
             news.setTitle(title);
             news.setImage(resultImageName);
             news.setDate(new Date());
-            news.setTournament(tournamentRepository.getTournamentById(tournament_id));
+            if(tournament_id!=null)
+                news.setTournament(tournamentRepository.getTournamentById(tournament_id));
             newsRepository.save(news);
             return null;
         }
@@ -126,6 +161,9 @@ public class AdminService {
     }
     public String validateTeamData(String category, String content, String name, MultipartFile image, boolean rukh){
         try{
+            if(teamRepository.existsByDisciplineAndRukh(category.toLowerCase(), rukh)){
+                throw new Exception("Уже существует команда rukh по данной дисциплине");
+            }
             if (!category.equalsIgnoreCase("pubg")&&!category.equalsIgnoreCase("mob")&&!category.equalsIgnoreCase("hok")) {
                 throw new Exception("Неверная категория");
             }
@@ -538,6 +576,9 @@ public class AdminService {
     }
     public String uploadSliderImage(MultipartFile image){
         try{
+            if(!galleryRepository.existsBySlider(true)){
+                throw new Exception("Не существует картинки для обновления");
+            }
             if ((image == null) || image.getOriginalFilename().isEmpty()) {
                 throw new Exception("Картинка пустая");
             }
@@ -548,7 +589,10 @@ public class AdminService {
             String UUIDAvatar = UUID.randomUUID().toString();
             String resultImageName = UUIDAvatar+"."+image.getOriginalFilename();
             image.transferTo(new File(uploadPath+"/"+resultImageName));
-            Gallery gallery = new Gallery();
+            Gallery gallery;
+            if(galleryRepository.getSliderImage()!=null)
+                gallery = galleryRepository.getSliderImage();
+            else gallery = new Gallery();
             gallery.setImg(resultImageName);
             gallery.setSlider(true);
             galleryRepository.save(gallery);

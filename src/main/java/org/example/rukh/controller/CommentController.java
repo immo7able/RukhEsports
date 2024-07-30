@@ -33,4 +33,13 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
         }
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteComment(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(value = "id") int id){
+        String error = commentService.deleteComment(id, userDetails);
+        if (error == null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+        }
+    }
 }

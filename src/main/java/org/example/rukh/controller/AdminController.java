@@ -23,14 +23,19 @@ public class AdminController {
                                         @RequestParam("discipline") String discipline,
                                         @RequestParam("title") String title,
                                         @RequestParam("image") MultipartFile image,
-                                        @RequestParam("tournament") int tournament_id,
+                                        @RequestParam(required = false) Integer tournament,
                                         @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails==null||userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
         } else {
-            String error = adminService.validateNewsData(discipline, content, title, image, tournament_id);
+            String error;
+            if(tournament!=null)
+                error = adminService.validateNewsData(discipline, content, title, image, tournament);
+            else {
+                error = adminService.validateNewsData(discipline, content, title, image);
+            }
             if (error == null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Success");
             } else {
