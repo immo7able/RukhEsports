@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.Optional;
 
 @Service
 public class EmailService {
@@ -30,19 +31,33 @@ public class EmailService {
         try {
             String subject = "Восстановление пароля";
             String password = generateRandomPassword();
-            String text = "Ваш новый пароль = "+password;
-            User user = userRepository.findByEmail(to).orElseThrow(() ->  new IllegalArgumentException("User not found"));
+            String text = "Ваш новый пароль = " + password;
+
+            Optional<User> optionalUser = userRepository.findByEmail(to);
+            if (optionalUser.isEmpty()) {
+                logger.error("User not found for email: {}", to);
+                return; // Выход из метода, если пользователь не найден
+            }
+
+            User user = optionalUser.get();
             user.setPassword(passwordEncoder.encode(password));
+
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
             message.setFrom(from);
             message.setSubject(subject);
             message.setText(text);
-            mailSender.send(message);
-            userRepository.save(user);
-            logger.info("Email sent successfully to {}", to);
+
+            try {
+                mailSender.send(message);
+                userRepository.save(user);
+                logger.info("Email sent successfully to {}", to);
+            } catch (Exception e) {
+                logger.error("Failed to send email to {}", to, e);
+            }
+
         } catch (Exception e) {
-            logger.error("Failed to send email to {}", to, e);
+            logger.error("An error occurred while processing email sending to {}", to, e);
         }
     }
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";

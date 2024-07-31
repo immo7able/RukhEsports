@@ -75,9 +75,9 @@ public class UserController {
         String email = payload.get("email");
         try {
             emailService.sendSimpleEmail(email);
-            return ResponseEntity.ok("Сообщение отправлено 1");
+            return ResponseEntity.ok("Сообщение отправлено");
         } catch (Exception e) {
-            return ResponseEntity.ok("Сообщение отправлено 2");
+            return ResponseEntity.ok("Сообщение отправлено");
         }
     }
 
