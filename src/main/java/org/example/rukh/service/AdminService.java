@@ -580,9 +580,6 @@ public class AdminService {
     }
     public String uploadSliderImage(MultipartFile image){
         try{
-            if(!galleryRepository.existsBySlider(true)){
-                throw new Exception("Не существует картинки для обновления");
-            }
             if ((image == null) || image.getOriginalFilename().isEmpty()) {
                 throw new Exception("Картинка пустая");
             }

@@ -57,7 +57,7 @@ public class CommentService {
         try{
             User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() ->  new IllegalArgumentException("User not found"));
             Comment comment = commentRepository.getCommentById(id);
-            if(user.getId().equals(comment.getId()))
+            if(user.getId().equals(comment.getUser().getId()))
                 commentRepository.delete(comment);
             return null;
         }
