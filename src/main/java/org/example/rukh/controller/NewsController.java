@@ -1,14 +1,17 @@
 package org.example.rukh.controller;
 
 import org.example.rukh.model.DTO.NewsDTO;
+import org.example.rukh.service.LikeService;
 import org.example.rukh.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,8 @@ public class NewsController {
 
     @Autowired
     private NewsService newsService;
+    @Autowired
+    private LikeService likeService;
 
     @GetMapping("/{discipline}")
     public ResponseEntity<List<NewsDTO>> getNews(@PathVariable(value="discipline") String discipline) {
@@ -35,6 +40,15 @@ public class NewsController {
     public ResponseEntity<List<NewsDTO>> getAllNews() {
         List<NewsDTO> News = newsService.getAllNews();
         return ResponseEntity.ok(News);
+    }
+    @PostMapping("/{id}/like")
+    public ResponseEntity<?> likeNews(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int id, @RequestBody Map<String, String> payload) {
+            String error = likeService.likeNews(id, Boolean.parseBoolean(payload.get("liked")), userDetails);
+            if (error == null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", error));
+            }
     }
 }
 

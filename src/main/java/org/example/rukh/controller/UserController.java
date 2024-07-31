@@ -1,6 +1,7 @@
 package org.example.rukh.controller;
 
 
+import org.example.rukh.service.EmailService;
 import org.example.rukh.service.UserService;
 import org.example.rukh.model.User;
 import org.example.rukh.utils.JwtUtil;
@@ -24,6 +25,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, String> payload) {
@@ -42,12 +45,14 @@ public class UserController {
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> payload) {
-        String email = payload.get("email");
-        String password = payload.get("password");
-        if (userService.authenticate(email, password)) {
-            String token = jwtUtil.generateToken(email);
-            return ResponseEntity.ok(Map.of("token", token));
-        } else {
+        try {
+            String email = payload.get("email");
+            String password = payload.get("password");
+            if(userService.authenticate(email, password)){
+                String token = jwtUtil.generateToken(email);
+                return ResponseEntity.ok(Map.of("token", token));
+            }else return ResponseEntity.status(401).body(Collections.singletonMap("error","Неверные учетные данные"));
+        }catch (Exception e){
             return ResponseEntity.status(401).body(Collections.singletonMap("error","Неверные учетные данные"));
         }
     }
@@ -63,6 +68,16 @@ public class UserController {
             return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.status(404).body("User not found");
+        }
+    }
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> payload) {
+        String email = payload.get("email");
+        try {
+            emailService.sendSimpleEmail(email);
+            return ResponseEntity.ok("Сообщение отправлено 1");
+        } catch (Exception e) {
+            return ResponseEntity.ok("Сообщение отправлено 2");
         }
     }
 

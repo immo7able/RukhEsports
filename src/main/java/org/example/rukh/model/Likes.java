@@ -8,13 +8,12 @@ public class Likes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Integer likeCount;
-    private Boolean liked;
-
     @ManyToOne
-    @JoinColumn(name = "fk_gallery")
-    private Gallery gallery;
+    @JoinColumn(name = "user_id")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "news_id")
+    private News news;
 
     public Long getId() {
         return id;
@@ -24,27 +23,19 @@ public class Likes {
         this.id = id;
     }
 
-    public Integer getLikeCount() {
-        return likeCount;
+    public User getUser() {
+        return user;
     }
 
-    public void setLikeCount(Integer likeCount) {
-        this.likeCount = likeCount;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Boolean getLiked() {
-        return liked;
+    public News getNews() {
+        return news;
     }
 
-    public void setLiked(Boolean liked) {
-        this.liked = liked;
-    }
-
-    public Gallery getGallery() {
-        return gallery;
-    }
-
-    public void setGallery(Gallery gallery) {
-        this.gallery = gallery;
+    public void setNews(News news) {
+        this.news = news;
     }
 }

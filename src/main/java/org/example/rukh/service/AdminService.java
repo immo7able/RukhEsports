@@ -30,6 +30,8 @@ public class AdminService {
     private MatchesRepository matchesRepository;
     @Autowired
     private GalleryRepository galleryRepository;
+    @Autowired
+    private LikeRepository likeRepository;
     @Value("${upload.path}")
     private String uploadPath;
     private static final Pattern ALLOWED_CHARACTERS_PATTERN = Pattern.compile("^[a-zA-Z0-9.@_]+$");
@@ -152,6 +154,8 @@ public class AdminService {
             News news = newsRepository.getNewsById(id);
             if(commentRepository.existsByNews(news))
                 commentRepository.deleteAllByNews(news);
+            if(likeRepository.existsByNews(news))
+                likeRepository.deleteAllByNews(news);
             newsRepository.delete(news);
             return null;
         }

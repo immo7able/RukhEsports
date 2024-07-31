@@ -2,6 +2,7 @@ package org.example.rukh.service;
 
 import org.example.rukh.model.DTO.NewsDTO;
 import org.example.rukh.model.News;
+import org.example.rukh.repository.LikeRepository;
 import org.example.rukh.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ import java.util.stream.Collectors;
 @Service
 public class NewsService {
     private final NewsRepository newsRepository;
+    @Autowired
+    private LikeRepository likeRepository;
 
     @Autowired
     public NewsService(NewsRepository newsRepository) {
@@ -45,7 +48,7 @@ public class NewsService {
         newsDTO.setImage("/uploads/"+news.getImage());
         newsDTO.setDate(news.getDate());
         newsDTO.setCategory(news.getCategory());
-        newsDTO.setLikeCount(0);
+        newsDTO.setLikeCount(likeRepository.countLikesByNews(news));
         return newsDTO;
     }
 }
