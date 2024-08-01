@@ -42,8 +42,8 @@ public class UserService {
             if(!password.matches(".*\\d.*")) {
                 throw new Exception("В пароле должна быть 1 цифра");
             }
-            if(!password.matches(".*[a-zA-Z].*")) {
-                throw new Exception("В пароле должна быть 1 буква");
+            if(!password.matches(".*[a-z].*")) {
+                throw new Exception("В пароле должна быть 1 строчная буква");
             }
             if(!password.matches(".*[A-Z].*")) {
                 throw new Exception("В пароле должна быть 1 заглавная буква");

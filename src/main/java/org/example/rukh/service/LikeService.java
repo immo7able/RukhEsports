@@ -41,11 +41,9 @@ public class LikeService {
             like.setNews(news);
             if(liked&&!likeRepository.existsByNewsAndUser(news, user)){
                 likeRepository.save(like);
-                System.out.println("Liked");
             }
             else {
                 likeRepository.deleteByUserAndNews(user, news);
-                System.out.println("Unliked");
             }
             return null;
         }

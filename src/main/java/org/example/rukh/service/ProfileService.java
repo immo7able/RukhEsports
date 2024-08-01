@@ -64,8 +64,8 @@ public class ProfileService {
             if(!newPassword.matches(".*\\d.*")) {
                 throw new Exception("В пароле должна быть 1 цифра");
             }
-            if(!newPassword.matches(".*[a-zA-Z].*")) {
-                throw new Exception("В пароле должна быть 1 буква");
+            if(!newPassword.matches(".*[a-z].*")) {
+                throw new Exception("В пароле должна быть 1 строчная буква");
             }
             if(!newPassword.matches(".*[A-Z].*")) {
                 throw new Exception("В пароле должна быть 1 заглавная буква");
