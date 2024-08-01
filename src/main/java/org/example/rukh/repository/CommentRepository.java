@@ -16,7 +16,9 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     @Query(value = "SELECT * FROM comments c WHERE c.id=:id", nativeQuery = true)
     Comment getCommentById(@Param("id") int id);
     @Query(value = "SELECT * FROM comments c WHERE c.parent_comment_id=:id", nativeQuery = true)
-    List<Comment> getCommentsByParentCommentId(int id);
+    List<Comment> getCommentsByParentCommentId(long id);
+    @Query(value="SELECT * FROM comments c WHERE c.parent_comment_id=0 and c.news_id=:id", nativeQuery = true)
+    List<Comment> getParentComments(@Param("id") int id);
     void deleteAllByNews(News news);
     boolean existsByNews(News news);
 }

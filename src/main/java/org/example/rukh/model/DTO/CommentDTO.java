@@ -1,6 +1,7 @@
 package org.example.rukh.model.DTO;
 
 import java.util.Date;
+import java.util.List;
 
 public class CommentDTO {
     private Long id;
@@ -8,6 +9,15 @@ public class CommentDTO {
     private Date date;
     private String avatar;
     private String nickname;
+    private List<CommentDTO> replies;
+
+    public List<CommentDTO> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<CommentDTO> replies) {
+        this.replies = replies;
+    }
 
     public Long getId() {
         return id;

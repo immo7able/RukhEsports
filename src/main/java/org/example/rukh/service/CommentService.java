@@ -29,8 +29,8 @@ public class CommentService {
     @Autowired
     private NewsRepository newsRepository;
     public List<CommentDTO> getCommentsById(int id) {
-        List<Comment> commentList = commentRepository.getCommentsById(id);
-        return commentList.stream().map(this::convertToDTO).collect(Collectors.toList());
+        List<Comment> parentComments = commentRepository.getParentComments(id);
+        return parentComments.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
     public String validateCommentData(int id, String text, int parent_comment_id, UserDetails userDetails){
         try{
@@ -72,6 +72,8 @@ public class CommentService {
         commentDTO.setAvatar("/uploads/"+comment.getUser().getAvatar());
         commentDTO.setDate(comment.getDate());
         commentDTO.setNickname(comment.getUser().getNickname());
+        List<CommentDTO> replies = commentRepository.getCommentsByParentCommentId(comment.getId()).stream().map(this::convertToDTO).collect(Collectors.toList());
+        commentDTO.setReplies(replies);
         return commentDTO;
     }
 }
