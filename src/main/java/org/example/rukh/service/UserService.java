@@ -39,6 +39,15 @@ public class UserService {
             if(password.length()<6){
                 throw new Exception("Пароль меньше 6 символов");
             }
+            if(!password.matches(".*\\d.*")) {
+                throw new Exception("В пароле должна быть 1 цифра");
+            }
+            if(!password.matches(".*[a-zA-Z].*")) {
+                throw new Exception("В пароле должна быть 1 буква");
+            }
+            if(!password.matches(".*[A-Z].*")) {
+                throw new Exception("В пароле должна быть 1 заглавная буква");
+            }
             if (!isAllowedCharacters(email)) {
                 throw new Exception("Почта содержит недопустимые символы");
             }

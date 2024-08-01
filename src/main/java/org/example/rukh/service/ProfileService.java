@@ -61,6 +61,15 @@ public class ProfileService {
             if (!isAllowedCharacters(newPassword)) {
                 throw new Exception("Пароль содержит недопустимые символы");
             }
+            if(!newPassword.matches(".*\\d.*")) {
+                throw new Exception("В пароле должна быть 1 цифра");
+            }
+            if(!newPassword.matches(".*[a-zA-Z].*")) {
+                throw new Exception("В пароле должна быть 1 буква");
+            }
+            if(!newPassword.matches(".*[A-Z].*")) {
+                throw new Exception("В пароле должна быть 1 заглавная буква");
+            }
             if(newPassword.length()<6){
                 throw new Exception("Пароль меньше 6 символов");
             }
