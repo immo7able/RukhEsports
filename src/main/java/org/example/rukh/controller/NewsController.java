@@ -1,6 +1,7 @@
 package org.example.rukh.controller;
 
 import org.example.rukh.model.DTO.NewsDTO;
+import org.example.rukh.model.Likes;
 import org.example.rukh.service.LikeService;
 import org.example.rukh.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,11 @@ public class NewsController {
     public ResponseEntity<NewsDTO> getNewsById(@PathVariable(value="discipline") String discipline, @PathVariable(value = "id") int id) {
         NewsDTO News = newsService.getNewsById(discipline, id);
         return ResponseEntity.ok(News);
+    }
+    @GetMapping("/{discipline}/{id}/likes")
+    public ResponseEntity<Boolean> getLikesByNews(@PathVariable(value="discipline") String discipline, @PathVariable(value = "id") int id, @AuthenticationPrincipal UserDetails userDetails) {
+        boolean likes = likeService.getLikesByNews(id, userDetails);
+        return ResponseEntity.ok(likes);
     }
     @GetMapping("/")
     public ResponseEntity<List<NewsDTO>> getAllNews() {

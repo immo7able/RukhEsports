@@ -19,6 +19,18 @@ public class LikeService {
     private LikeRepository likeRepository;
     @Autowired
     private NewsRepository newsRepository;
+    public boolean getLikesByNews(int id, UserDetails userDetails){
+        try{
+            User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() ->  new IllegalArgumentException("User not found"));
+            News news = newsRepository.getNewsById(id);
+            boolean likes = likeRepository.existsByNewsAndUser(news, user);
+            if(likes)
+                return true;
+            else return false;
+        }catch (Exception e){
+            return false;
+        }
+    }
     @Transactional
     public String likeNews(int id, boolean liked, UserDetails userDetails) {
         try{
