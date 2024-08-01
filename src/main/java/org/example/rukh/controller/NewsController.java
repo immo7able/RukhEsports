@@ -37,8 +37,8 @@ public class NewsController {
         NewsDTO News = newsService.getNewsById(discipline, id);
         return ResponseEntity.ok(News);
     }
-    @GetMapping("/{discipline}/{id}/likes")
-    public ResponseEntity<Boolean> getLikesByNews(@PathVariable(value="discipline") String discipline, @PathVariable(value = "id") int id, @AuthenticationPrincipal UserDetails userDetails) {
+    @GetMapping("/{id}/likes")
+    public ResponseEntity<Boolean> getLikesByNews(@PathVariable(value = "id") int id, @AuthenticationPrincipal UserDetails userDetails) {
         boolean likes = likeService.getLikesByNews(id, userDetails);
         return ResponseEntity.ok(likes);
     }
