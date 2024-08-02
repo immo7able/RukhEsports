@@ -646,7 +646,11 @@ public class AdminService {
             String UUIDAvatar = UUID.randomUUID().toString();
             String resultImageName = UUIDAvatar+"."+image.getOriginalFilename();
             image.transferTo(new File(uploadPath+"/"+resultImageName));
-            Gallery gallery = new Gallery();
+            Gallery gallery;
+            if(galleryRepository.existsByPageAndDiscipline(page, tab))
+                gallery = galleryRepository.getTopImage(page, tab);
+            else
+                gallery = new Gallery();
             gallery.setImg(resultImageName);
             gallery.setSlider(false);
             gallery.setPage(page);
