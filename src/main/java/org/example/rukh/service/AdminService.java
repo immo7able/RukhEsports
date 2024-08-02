@@ -165,7 +165,7 @@ public class AdminService {
     }
     public String validateTeamData(String category, String name, MultipartFile image, boolean rukh){
         try{
-            if(teamRepository.existsByDisciplineAndRukh(category.toLowerCase(), rukh)){
+            if(rukh==true&&teamRepository.existsByDisciplineAndRukh(category.toLowerCase(), rukh)){
                 throw new Exception("Уже существует команда rukh по данной дисциплине");
             }
             if (!category.equalsIgnoreCase("pubg")&&!category.equalsIgnoreCase("mob")&&!category.equalsIgnoreCase("hok")) {

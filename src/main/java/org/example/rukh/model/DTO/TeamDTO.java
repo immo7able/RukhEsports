@@ -11,13 +11,23 @@ public class TeamDTO {
     private String name;
     private String discipline;
     private String img;
+    private boolean rukh;
     private List<PlayerDTO> players;
+
+    public boolean isRukh() {
+        return rukh;
+    }
+
+    public void setRukh(boolean rukh) {
+        this.rukh = rukh;
+    }
 
     public TeamDTO(Team team) {
         this.id=team.getId();
         this.name=team.getName();
         this.discipline=team.getDiscipline();
         this.img=team.getImg();
+        this.rukh = team.isRukh();
     }
     public TeamDTO() {
     }
