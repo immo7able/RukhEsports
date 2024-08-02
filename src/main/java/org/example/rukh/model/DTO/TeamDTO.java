@@ -10,7 +10,6 @@ public class TeamDTO {
 
     private String name;
     private String discipline;
-    private String content;
     private String img;
     private List<PlayerDTO> players;
 
@@ -18,7 +17,6 @@ public class TeamDTO {
         this.id=team.getId();
         this.name=team.getName();
         this.discipline=team.getDiscipline();
-        this.content=team.getContent();
         this.img=team.getImg();
     }
     public TeamDTO() {
@@ -56,13 +54,6 @@ public class TeamDTO {
         this.discipline = discipline;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     public String getImg() {
         return img;

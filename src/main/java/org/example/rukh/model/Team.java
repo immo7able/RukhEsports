@@ -11,7 +11,6 @@ public class Team {
 
     private String name;
     private String discipline;
-    private String content;
     private String img;
     private boolean rukh;
 
@@ -31,13 +30,6 @@ public class Team {
         this.discipline = discipline;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     public String getImg() {
         return img;

@@ -163,16 +163,13 @@ public class AdminService {
             return "Ошибка при обновлении: "+e.getMessage();
         }
     }
-    public String validateTeamData(String category, String content, String name, MultipartFile image, boolean rukh){
+    public String validateTeamData(String category, String name, MultipartFile image, boolean rukh){
         try{
             if(teamRepository.existsByDisciplineAndRukh(category.toLowerCase(), rukh)){
                 throw new Exception("Уже существует команда rukh по данной дисциплине");
             }
             if (!category.equalsIgnoreCase("pubg")&&!category.equalsIgnoreCase("mob")&&!category.equalsIgnoreCase("hok")) {
                 throw new Exception("Неверная категория");
-            }
-            if (content.isEmpty()) {
-                throw new Exception("Пустая новость");
             }
             if (name.isEmpty()) {
                 throw new Exception("Пустое название");
@@ -189,7 +186,6 @@ public class AdminService {
             image.transferTo(new File(uploadPath+"/"+resultImageName));
             Team team = new Team();
             team.setDiscipline(category.toLowerCase());
-            team.setContent(content);
             team.setName(name);
             team.setImg(resultImageName);
             team.setRukh(rukh);
@@ -200,16 +196,13 @@ public class AdminService {
             return "Ошибка при создании: "+e.getMessage();
         }
     }
-    public String updateTeamData(int id, String category, String content, String name, MultipartFile image){
+    public String updateTeamData(int id, String category, String name, MultipartFile image){
         try{
             if(!teamRepository.existsById(id)){
                 throw new Exception("Неправильный id");
             }
             if (!category.equalsIgnoreCase("pubg")&&!category.equalsIgnoreCase("mob")&&!category.equalsIgnoreCase("hok")) {
                 throw new Exception("Неверная категория");
-            }
-            if (content.isEmpty()) {
-                throw new Exception("Пустая новость");
             }
             if (name.isEmpty()) {
                 throw new Exception("Пустой заголовок");
@@ -226,7 +219,6 @@ public class AdminService {
             image.transferTo(new File(uploadPath+"/"+resultImageName));
             Team team = teamRepository.getTeamById(id);
             team.setDiscipline(category.toLowerCase());
-            team.setContent(content);
             team.setName(name);
             team.setImg(resultImageName);
             teamRepository.save(team);

@@ -80,8 +80,7 @@ public class AdminController {
         }
     }
     @PostMapping("/createTeam")
-    public ResponseEntity<?> createTeam(@RequestParam("content") String content,
-                                        @RequestParam("discipline") String discipline,
+    public ResponseEntity<?> createTeam(@RequestParam("discipline") String discipline,
                                         @RequestParam("name") String name,
                                         @RequestParam("image") MultipartFile image,
                                         @RequestParam("rukh") boolean rukh,
@@ -91,7 +90,7 @@ public class AdminController {
                 .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
         } else {
-            String error = adminService.validateTeamData(discipline, content, name, image, rukh);
+            String error = adminService.validateTeamData(discipline, name, image, rukh);
             if (error == null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Success");
             } else {
@@ -101,7 +100,6 @@ public class AdminController {
     }
     @PutMapping("/updateTeam/{id}")
     public ResponseEntity<?> updateTeam(@AuthenticationPrincipal UserDetails userDetails,
-                                        @RequestParam("content") String content,
                                         @RequestParam("discipline") String discipline,
                                         @RequestParam("name") String name,
                                         @RequestParam("image") MultipartFile image,
@@ -111,7 +109,7 @@ public class AdminController {
                 .noneMatch(role -> role.equals("ROLE_ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin");
         } else {
-            String error = adminService.updateTeamData(id, discipline, content, name, image);
+            String error = adminService.updateTeamData(id, discipline, name, image);
             if (error == null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Success");
             } else {

@@ -41,7 +41,6 @@ public class TeamService {
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setId(team.getId());
         teamDTO.setName(team.getName());
-        teamDTO.setContent(team.getContent());
         teamDTO.setImg("/uploads/"+team.getImg());
         teamDTO.setDiscipline(team.getDiscipline());
         teamDTO.setPlayers(playerRepository.getPlayerByTeam(team).stream().map(this::convertToDTO).collect(Collectors.toList()));
