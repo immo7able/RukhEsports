@@ -73,6 +73,7 @@ public class MatchesService {
         teamDTO.setName(team.getName());
         teamDTO.setImg("/uploads/"+team.getImg());
         teamDTO.setDiscipline(team.getDiscipline());
+        teamDTO.setRukh(team.isRukh());
         teamDTO.setPlayers(playerRepository.getPlayerByTeam(team).stream().map(this::convertToDTO).collect(Collectors.toList()));
         return teamDTO;
     }
