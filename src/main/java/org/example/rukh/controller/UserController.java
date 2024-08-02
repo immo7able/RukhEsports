@@ -63,6 +63,7 @@ public class UserController {
         }
         String username = userDetails.getUsername();
         User user = userService.getUser(username);
+        user.setPassword(null);
         if (user != null) {
             user.setAvatar("/uploads/" + user.getAvatar());
             return ResponseEntity.ok(user);
